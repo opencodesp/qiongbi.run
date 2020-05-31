@@ -46,6 +46,8 @@
         @media screen and (max-width: 620px){
             .remark {line-height: 20px;background-repeat: repeat-y;}
             .remark p {padding: 6px 0;}
+            #records .pay-remark {display: none;}
+            #records .pay-time {min-width: 120px;}
         }
     </style>
 </head>
@@ -118,9 +120,9 @@
 
         function parseRecord(txt) {
             let fields = txt.split(' ')
-            let datetime = new Date(Date.parse(fields[0].replace('T', ' ') + ' UTC+8'))
+            let datetime = new Date(fields[0])
             return {
-                time: datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate(),
+                time: datetime.getUTCFullYear() + '-' + (datetime.getUTCMonth() + 1) + '-' + datetime.getUTCDate(),
                 name: fields[1],
                 amount: Number(fields[2]),
                 payType: fields[3],
