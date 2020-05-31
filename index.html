@@ -118,7 +118,7 @@
 
         function parseRecord(txt) {
             let fields = txt.split(' ')
-            let datetime = new Date(Date.parse(fields[0]))
+            let datetime = new Date(Date.parse(fields[0].replace('T', ' ') + ' UTC+8'))
             return {
                 time: datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate(),
                 name: fields[1],
