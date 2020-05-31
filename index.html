@@ -1,140 +1,132 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta content="yes" name="apple-mobile-web-app-capable" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>穷比在线乞讨 - QiongBi.Run</title>
-        <style type="text/css">
-            * {
-                -webkit-touch-callout:none;
-                -webkit-user-select:none;
-                -khtml-user-select:none;
-                -moz-user-select:none;
-                -ms-user-select:none;
-                user-select:none;
+<head>
+    <meta charset="utf-8" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>穷比在线乞讨 - QiongBi.Run</title>
+    <style type="text/css">
+        * {
+            -webkit-touch-callout:none;
+            -webkit-user-select:none;
+            -khtml-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+            padding: 0;margin: 0;
+        }
+        body {text-align: center;font-size: 14px;border-top: 4px solid #44b549;padding: 0 10px;}
+        h1 {color: #222;font-size: 32px;line-height: 92px;}
+        .qiong {color: #000;font-style: normal;background: #222;border-radius: 3px;}
+        .mark {background-color: #fff;color: #69c;padding: 0 5px;font-size: 12px;border-radius: 2px;}
+        .remark {
+            border-radius: 5px;
+            line-height: 28px;
+            padding: 10px;
+            color: #fff;
+            max-width: 680px;
+            margin: 10px auto;
+            background: url(https://gw.alipayobjects.com/mdn/antopen_mi/afts/img/A*kROjRqzOQEQAAAAAAAAAAABkARQnAQ) no-repeat 50%;
+            background-size: 100% auto;
+        }
+        .remark p {padding: 0;margin: 0;}
+        footer {margin-top: 20px;line-height: 28px;}
+        .amount {color: #108ee9;font-size: 18px;margin: 0 5px;}
+        .desc {font-size: 12px;color: #ccc;font-weight: bold;}
+
+        #records {line-height: 18px;max-width: 520px;margin: 10px auto;padding: 10px;border: 1px dotted #ccc;}
+        #records p {line-height: 20px;margin: 0;}
+        #records p::before {content: '⚓';}
+        #records .pay-name {color: green;display: inline-block;min-width: 58px;margin: 0 5px;}
+        #records .pay-amount {color: #108ee9;display: inline-block;min-width: 36px;margin: 0 5px;}
+        #records .pay-type {min-width: 32px;display: inline-block;margin: 0 5px;}
+        #records .pay-time {display: inline-block;min-width: 100px;margin: 0 5px;}
+        #records .pay-remark {display: inline-block;min-width: 200px;margin: 0 5px;}
+
+        @media screen and (max-width: 620px){
+            .remark {line-height: 20px;background-repeat: repeat-y;}
+            .remark p {padding: 6px 0;}
+        }
+    </style>
+</head>
+<body>
+    <h1>在下<em class="qiong">穷</em>比，行行好吧</h1>
+    <main>
+        <div class="remark">
+            <p>
+                鄙人<span class="mark">安静的等待</span>，梦想能住上好房开上豪车！现实残酷，现贴上<span class="mark">1元</span>收钱码在线乞讨！
+            </p>
+            <p>
+                如你所见，乞讨网站虽然做的很low，但在下认为，只要<span class="mark">有个盆</span>让好心人扔钱就足够了！
+            </p>
+            <p>
+                推荐好心人使用<span class="mark">微信赏钱（第一张）</span>！<span class="mark">支付宝</span>为备选方案，万一一个盆装不下呢！
+            </p>
+            <p>努力无果的我，能圆梦吗？好人一生平安！</p>
+        </div>
+        <br />
+        <img src="https://t.igo.pub/qiongbi/wechat.png" width="160" />
+        <img src="https://t.igo.pub/qiongbi/alipay.png" width="160" />
+        <div id="records-html-holder" style="display: none;"></div>
+    </main>
+    
+    <footer>
+        截至<span class="deadline">2020-05-31</span>日，共收到<span class="amount">0.00</span>元人民币。<span class="desc">（统计采用：艰难的手动更新）</span><br />
+        <div id="records">
+
+        </div>
+        &copy;Qiongbi.run
+    </footer>
+    <script type="text/javascript">
+        let recordsUrl = 
+            'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/opencodesp/qiongbi.run/master/records.txt'
+        fetch(new Request(recordsUrl, {method: 'GET'})).then(res => res.text()).then(txt => {
+            txt.split('\n').forEach(line => {
+                if(!line) return
+                let record = parseRecord(line)
+
+                let pDom = document.querySelector('#records').appendChild(document.createElement('p'))
+
+                let nameDom = pDom.appendChild(document.createElement('span'))
+                nameDom.setAttribute('class', 'pay-name')
+                nameDom.innerHTML = record.name
+
+                let amountDom = pDom.appendChild(document.createElement('span'))
+                amountDom.setAttribute('class', 'pay-amount')
+                amountDom.innerHTML = record.amount + '元'
+
+                let payTypeDom = pDom.appendChild(document.createElement('span'))
+                payTypeDom.setAttribute('class', 'pay-type')
+                payTypeDom.innerHTML = record.payType
+
+                let payTimeDom = pDom.appendChild(document.createElement('span'))
+                payTimeDom.setAttribute('class', 'pay-time')
+                payTimeDom.innerHTML = record.time
+
+                let remarkDom = pDom.appendChild(document.createElement('span'))
+                remarkDom.innerHTML = record.remark
+                remarkDom.setAttribute('class', 'pay-remark')
+
                 
-            }
-            body {text-align: center;font-size: 14px;border-top: 4px solid #44b549;padding: 0 10px;}
-            h1 {color: #222;font-size: 32px;line-height: 92px;}
-            .qiong {color: #000;font-style: normal;background: #222;border-radius: 3px;}
-            .mark {background-color: #fff;color: #69c;padding: 0 5px;font-size: 12px;border-radius: 2px;}
-            .remark {
-                border-radius: 5px;
-                line-height: 28px;
-                padding: 10px;
-                color: #fff;
-                max-width: 680px;
-                margin: 10px auto;
-                background: url(https://gw.alipayobjects.com/mdn/antopen_mi/afts/img/A*kROjRqzOQEQAAAAAAAAAAABkARQnAQ) no-repeat 50%;
-                background-size: 100% auto;
-            }
-            .remark p {padding: 0;margin: 0;}
-            footer {margin-top: 20px;line-height: 28px;}
-            .amount {color: #108ee9;font-size: 18px;margin: 0 5px;}
-            .desc {font-size: 12px;color: #ccc;font-weight: bold;}
+                let allAmountDom = document.querySelector('.amount')
 
-            #records {line-height: 18px;max-width: 520px;margin: 10px auto;text-align: left;padding: 10px;border: 1px dotted #ccc;}
-            #records p {line-height: 20px;margin: 0;}
-            #records p::before {content: '⚓';}
-            #records .pay-name {color: green;display: inline-block;min-width: 56px;margin: 0 5px;}
-            #records .pay-amount {color: #108ee9;display: inline-block;min-width: 24px;margin: 0 5px;}
-            #records .pay-type {min-width: 24px;display: inline-block;margin: 0 5px;}
-            #records .pay-time {display: inline-block;min-width: 120px;margin: 0 5px;}
+                allAmountDom.innerHTML = Number(allAmountDom.innerHTML) + record.amount
+                document.querySelector('.deadline').innerHTML = record.time
 
-
-            @media screen and (max-width: 620px){
-                .remark {line-height: 20px;background-repeat: repeat-y;}
-                .remark p {padding: 6px 0;}
-            }
-        </style>
-    </head>
-    <body>
-        <h1>在下<em class="qiong">穷</em>比，行行好吧</h1>
-        <main>
-            <div class="remark">
-                <p>
-                    鄙人<span class="mark">安静的等待</span>，梦想能住上好房开上豪车！现实残酷，现贴上<span class="mark">1元</span>收钱码在线乞讨！
-                </p>
-                <p>
-                    如你所见，乞讨网站虽然做的很low，但在下认为，只要<span class="mark">有个盆</span>让好心人扔钱就足够了！
-                </p>
-                <p>
-                    推荐好心人使用<span class="mark">微信赏钱（第一张）</span>！<span class="mark">支付宝</span>为备选方案，万一一个盆装不下呢！
-                </p>
-                <p>努力无果的我，能圆梦吗？好人一生平安！</p>
-            </div>
-            <br />
-            <img src="https://t.igo.pub/qiongbi/wechat.png" width="160" />
-            <img src="https://t.igo.pub/qiongbi/alipay.png" width="160" />
-            <div id="records-html-holder" style="display: none;"></div>
-        </main>
-        <style>
-            * {padding: 0;margin: 0;}
-        </style>
-        <footer>
-            截至<span class="deadline">2020-05-31日</span>，共收到<span class="amount">0.00</span>元人民币。<span class="desc">（统计采用：艰难的手动更新）</span><br />
-            <div id="records">
-
-            </div>
-            &copy;Qiongbi.run
-        </footer>
-        <script type="text/javascript">
-            fetch(new Request('https://cors-anywhere.herokuapp.com/https://github.com/opencodesp/qiongbi.run/blob/master/records.txt', {method: 'GET'}))
-            .then(res => res.text())
-            .then(txt => {
-                document.querySelector('#records-html-holder').innerHTML = txt
-
-                let arr = document.querySelector('#records-html-holder').querySelectorAll('div.application-main > div > main > div.container-lg.clearfix.new-discussion-timeline.p-responsive > div > div.Box.mt-3.position-relative > div.Box-body.p-0.blob-wrapper.data.type-text > table > tbody > tr')
-                arr.forEach(tr => {
-                    let record = parseRecord(tr.querySelector('.blob-code').innerHTML)
-                    let recordsDom = document.querySelector('#records')
-
-
-                    let payTimeDom = document.createElement('span')
-                    payTimeDom.setAttribute('class', 'pay-time')
-                    payTimeDom.innerHTML = record.time
-                    
-
-                    let nameDom = document.createElement('span')
-                    nameDom.setAttribute('class', 'pay-name')
-                    nameDom.innerHTML = record.name
-
-                    let amountDom = document.createElement('span')
-                    amountDom.setAttribute('class', 'pay-amount')
-                    amountDom.innerHTML = record.amount + '元'
-
-                    let payTypeDom = document.createElement('span')
-                    payTypeDom.setAttribute('class', 'pay-type')
-                    payTypeDom.innerHTML = record.payType
-
-
-                    let pDom = document.createElement('p')
-                    pDom.appendChild(nameDom)
-                    pDom.appendChild(amountDom)
-                    pDom.appendChild(payTypeDom)
-                    pDom.appendChild(payTimeDom)
-
-                    recordsDom.appendChild(pDom)
-                    let allAmountDom = document.querySelector('.amount')
-                    let deadlineDom = document.querySelector('.deadline')
-
-                    allAmountDom.innerHTML = Number(allAmountDom.innerHTML) + record.amount
-                    deadlineDom.innerHTML = record.time
-
-                })
             })
-            .catch(e => console.log(e))
+        }).catch(e => console.log(e))
 
-            function parseRecord(txt) {
-                let fields = txt.split(' ')
-                return {
-                    time: fields[0],
-                    name: fields[1],
-                    amount: Number(fields[2]),
-                    payType: fields[3]
-                }
+        function parseRecord(txt) {
+            let fields = txt.split(' ')
+            let datetime = new Date(Date.parse(fields[0]))
+            return {
+                time: datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate(),
+                name: fields[1],
+                amount: Number(fields[2]),
+                payType: fields[3],
+                remark: fields[4]?fields[4]:'无'
             }
-        </script>
-    </body>
+        }
+    </script>
+</body>
 </html>
