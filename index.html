@@ -32,6 +32,14 @@
             .amount {color: #108ee9;font-size: 18px;margin: 0 5px;}
             .desc {font-size: 12px;color: #ccc;font-weight: bold;}
 
+            #records {line-height: 22px;max-width: 520px;margin: 10px auto;text-align: left;padding: 10px;border: 1px dotted #ccc;}
+            #records p::before {content: '⚓';}
+            #records .pay-name {color: green;display: inline-block;min-width: 56px;margin: 0 5px;}
+            #records .pay-amount {color: #108ee9;display: inline-block;min-width: 24px;margin: 0 5px;}
+            #records .pay-type {min-width: 24px;display: inline-block;margin: 0 5px;}
+            #records .pay-time {display: inline-block;min-width: 120px;margin: 0 5px;}
+
+
             @media screen and (max-width: 620px){
                 .remark {line-height: 20px;background-repeat: repeat-y;}
                 .remark p {padding: 6px 0;}
@@ -55,11 +63,71 @@
             <br />
             <img src="https://t.igo.pub/qiongbi/wechat.png" width="160" />
             <img src="https://t.igo.pub/qiongbi/alipay.png" width="160" />
+            <div id="records-html-holder" style="display: none;"></div>
         </main>
         <footer>
-            截至2020-05-31日，共收到<span class="amount">0.00元</span>人民币。<span class="desc">（统计采用：艰难的手动更新）</span><br />
+            截至<span class="deadline">2020-05-31日</span>，共收到<span class="amount">0.00</span>元人民币。<span class="desc">（统计采用：艰难的手动更新）</span><br />
+            <div id="records">
 
+            </div>
             &copy;Qiongbi.run
         </footer>
+        <script type="text/javascript">
+            fetch(new Request('https://cors-anywhere.herokuapp.com/https://github.com/opencodesp/qiongbi.run/blob/master/records.txt', {method: 'GET'}))
+            .then(res => res.text())
+            .then(txt => {
+                document.querySelector('#records-html-holder').innerHTML = txt
+
+                let arr = document.querySelector('#records-html-holder').querySelectorAll('div.application-main > div > main > div.container-lg.clearfix.new-discussion-timeline.p-responsive > div > div.Box.mt-3.position-relative > div.Box-body.p-0.blob-wrapper.data.type-text > table > tbody > tr')
+                arr.forEach(tr => {
+                    let record = parseRecord(tr.querySelector('.blob-code').innerHTML)
+                    let recordsDom = document.querySelector('#records')
+
+
+                    let payTimeDom = document.createElement('span')
+                    payTimeDom.setAttribute('class', 'pay-time')
+                    payTimeDom.innerHTML = record.time
+                    
+
+                    let nameDom = document.createElement('span')
+                    nameDom.setAttribute('class', 'pay-name')
+                    nameDom.innerHTML = record.name
+
+                    let amountDom = document.createElement('span')
+                    amountDom.setAttribute('class', 'pay-amount')
+                    amountDom.innerHTML = record.amount
+
+                    let payTypeDom = document.createElement('span')
+                    payTypeDom.setAttribute('class', 'pay-type')
+                    payTypeDom.innerHTML = record.payType
+
+
+                    let pDom = document.createElement('p')
+                    pDom.appendChild(nameDom)
+                    pDom.appendChild(amountDom)
+                    pDom.appendChild(payTypeDom)
+                    pDom.appendChild(payTimeDom)
+
+                    recordsDom.appendChild(pDom)
+                    let allAmountDom = document.querySelector('.amount')
+                    let deadlineDom = document.querySelector('.deadline')
+
+                    allAmountDom.innerHTML = Number(allAmountDom.innerHTML) + record.amount
+                    deadlineDom.innerHTML = record.time
+
+                })
+            })
+            .catch(e => console.log(e))
+
+            function parseRecord(txt) {
+                let fields = txt.split(' ')
+                return {
+                    time: fields[0],
+                    name: fields[1],
+                    amount: Number(fields[2]),
+                    payType: fields[3]
+                }
+            }
+        </script>
     </body>
 </html>
