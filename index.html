@@ -80,9 +80,12 @@
         &copy;Qiongbi.run
     </footer>
     <script type="text/javascript">
+        let deadlineDom = document.querySelector('.deadline')
+        let allAmountDom = document.querySelector('.amount')
         let recordsUrl = 
             'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/opencodesp/qiongbi.run/master/records.txt'
         fetch(new Request(recordsUrl, {method: 'GET'})).then(res => res.text()).then(txt => {
+            allAmountDom.innerHTML = '0'
             txt.split('\n').forEach(line => {
                 if(!line) return
                 let record = parseRecord(line)
@@ -109,14 +112,19 @@
                 remarkDom.innerHTML = record.remark
                 remarkDom.setAttribute('class', 'pay-remark')
 
-                
-                let allAmountDom = document.querySelector('.amount')
-
                 allAmountDom.innerHTML = Number(allAmountDom.innerHTML) + record.amount
-                document.querySelector('.deadline').innerHTML = record.time
+                deadlineDom.innerHTML = record.time
 
             })
+            localStorage.setItem('latest-data', JSON.stringify({deadline: deadlineDom.innerHTML, amount: allAmountDom.innerHTML}))
         }).catch(e => console.log(e))
+
+        let latestData = localStorage.getItem('latest-data')
+        if(latestData) {
+            latestData = JSON.parse(latestData)
+            deadlineDom.innerHTML = latestData.deadline
+            allAmountDom.innerHTML = latestData.amount
+        }
 
         function parseRecord(txt) {
             let fields = txt.split(' ')
